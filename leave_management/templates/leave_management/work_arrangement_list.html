@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Arrangement</title>
+
+    <link rel="stylesheet" href="{% static 'leave_management/css/style.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="page-title">
+
+            <div>
+                <h2>Work Arrangement</h2>
+                <p class="subtitle">Manage employee work arrangements</p>
+            </div>
+
+            <a href="{% url 'leave_list' %}" class="btn btn-primary">
+                ← Leave List
+            </a>
+
+        </div>
+
+        <table>
+
+            <thead>
+
+            <tr>
+                <th>Arrangement ID</th>
+                <th>Leave ID</th>
+                <th>Employee ID</th>
+                <th>Alternate Employee</th>
+                <th>Status</th>
+                <th>Response Date</th>
+                <th>Action</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for arrangement in arrangements %}
+
+            <tr>
+
+                <td>{{ arrangement.arrangement_id }}</td>
+
+                <td>{{ arrangement.leave.leave_id }}</td>
+
+                <td>{{ arrangement.leave.emp_id }}</td>
+
+                <td>{{ arrangement.leave.alternate_employee_id|default:"-" }}</td>
+
+                <td>
+
+                    {% if arrangement.status == "Pending" %}
+
+                        <span class="badge pending">
+                            Pending
+                        </span>
+
+                    {% elif arrangement.status == "Accepted" %}
+
+                        <span class="badge approved">
+                            Accepted
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge rejected">
+                            Rejected
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if arrangement.response_date %}
+                        {{ arrangement.response_date|date:"M d, Y h:i A" }}
+                    {% else %}
+                        -
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if arrangement.status == "Pending" %}
+
+                    <div class="action-buttons">
+
+                        <a href="{% url 'update_work_arrangement' arrangement.arrangement_id 'Accepted' %}"
+                           class="btn btn-success">
+                            Accept
+                        </a>
+
+                        <a href="{% url 'update_work_arrangement' arrangement.arrangement_id 'Rejected' %}"
+                           class="btn btn-danger">
+                            Reject
+                        </a>
+
+                    </div>
+
+                    {% else %}
+
+                        <span class="completed">
+                            ✓ Completed
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="7" style="text-align:center;padding:30px;">
+                    No Work Arrangements Found
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

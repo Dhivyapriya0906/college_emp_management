@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{% static 'leave_management/css/style.css' %}">
+    <title>Apply Leave</title>
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+<h2>Leave Application Form</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div style="color:red;">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
+    {{ form.emp_id.label_tag }}
+    {{ form.emp_id }}
+    <br><br>
+
+    {{ form.leave_duration.label_tag }}
+    {{ form.leave_duration }}
+    <br><br>
+
+    <div id="single_day">
+
+        {{ form.single_leave_date.label_tag }}
+        {{ form.single_leave_date }}
+        <br><br>
+
+        {{ form.session.label_tag }}
+        {{ form.session }}
+
+    </div>
+
+    <div id="multiple_day">
+
+        {{ form.from_date.label_tag }}
+        {{ form.from_date }}
+        <br><br>
+
+        {{ form.to_date.label_tag }}
+        {{ form.to_date }}
+
+    </div>
+
+    <br>
+
+    {{ form.leave_type.label_tag }}
+    {{ form.leave_type }}
+    <br><br>
+
+    {{ form.reason.label_tag }}
+    {{ form.reason }}
+    <br><br>
+
+    <!-- Alternate Employee -->
+    {{ form.alternate_employee_id.label_tag }}
+    {{ form.alternate_employee_id }}
+    <br><br>
+
+    <button type="submit" class="btn btn-success">
+        Apply Leave
+    </button>
+
+</form>
+
+<br>
+
+<a href="{% url 'leave_list' %}" class="btn btn-primary">
+    View Leave List
+</a>
+
+<script>
+
+const duration = document.getElementById("id_leave_duration");
+const single = document.getElementById("single_day");
+const multiple = document.getElementById("multiple_day");
+
+function toggleFields() {
+
+    if (duration.value === "Single Day") {
+        single.style.display = "block";
+        multiple.style.display = "none";
+    }
+    else {
+        single.style.display = "none";
+        multiple.style.display = "block";
+    }
+}
+
+toggleFields();
+
+duration.addEventListener("change", toggleFields);
+
+</script>
+
+</div>
+</div>
+
+</body>
+</html>

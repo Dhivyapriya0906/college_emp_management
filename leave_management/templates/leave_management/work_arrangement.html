@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Work Arrangement</title>
+    <link rel="stylesheet" href="{% static 'leave_management/css/style.css' %}">
+</head>
+<body>
+
+<div class="container">
+<div class="card">
+
+<div class="page-title">
+    <div>
+        <h2>Work Arrangement</h2>
+        <p class="subtitle">Manage substitute arrangements during leave</p>
+    </div>
+    <a href="{% url 'arrangement_create' %}" class="btn btn-success">+ New Arrangement</a>
+</div>
+
+<table>
+<tr>
+    <th>Arrangement ID</th>
+    <th>Leave</th>
+    <th>Status</th>
+    <th>Response Date</th>
+    <th>Remarks</th>
+    <th>Action</th>
+</tr>
+
+{% for a in arrangements %}
+<tr>
+    <td>{{ a.arrangement_id }}</td>
+    <td>{{ a.leave }}</td>
+    <td>{{ a.status }}</td>
+    <td>{{ a.response_date|default:"-" }}</td>
+    <td>{{ a.remarks }}</td>
+    <td>
+        <a href="{% url 'arrangement_update_status' a.pk %}" class="btn btn-primary">Update</a>
+    </td>
+</tr>
+{% empty %}
+<tr><td colspan="6">No Arrangements Found</td></tr>
+{% endfor %}
+
+</table>
+
+</div>
+</div>
+
+</body>
+</html>
