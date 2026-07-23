@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leave Management</title>
+    <link rel="stylesheet" href="{% static 'leave_management/css/style.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+    <div class="page-title">
+        <div>
+            <h2>Leave Management</h2>
+            <p class="subtitle">
+                Manage employee leave requests
+            </p>
+        </div>
+
+        <a href="{% url 'leave_create' %}" class="btn btn-success">
+            + Apply Leave
+        </a>
+    </div>
+
+    <table>
+
+        <tr>
+            <th>Employee ID</th>
+            <th>Leave Type</th>
+            <th>Duration</th>
+            <th>Leave Date</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for leave in leaves %}
+
+        <tr>
+
+            <td>{{ leave.emp_id }}</td>
+
+            <td>{{ leave.leave_type }}</td>
+
+            <td>{{ leave.leave_duration }}</td>
+
+            <td>
+                {% if leave.leave_duration == "Single Day" %}
+                    {{ leave.single_leave_date }}
+                {% else %}
+                    {{ leave.from_date }} to {{ leave.to_date }}
+                {% endif %}
+            </td>
+
+            <td>{{ leave.reason }}</td>
+
+            <td>
+                {% if leave.leave_status == "Pending" %}
+                    <span class="badge pending">Pending</span>
+
+                {% elif leave.leave_status == "Approved" %}
+                    <span class="badge approved">Approved</span>
+
+                {% else %}
+                    <span class="badge rejected">Rejected</span>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if leave.leave_status == "Pending" %}
+                    <a href="{% url 'leave_delete' leave.pk %}"
+                       class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+                {% else %}
+                    <span style="color: gray;">-</span>
+                {% endif %}
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="7" style="text-align:center;">
+                No Leave Requests Found
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+</div>
+
+</body>
+</html>
